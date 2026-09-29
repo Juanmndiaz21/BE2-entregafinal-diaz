@@ -79,3 +79,4 @@ npm start
 - `POST /:cid/products/:pid`: Agregar producto al carrito (requiere rol user).
 - `POST /:cid/purchase`: Finalizar compra, validar stock, generar ticket de compra y actualizar productos pendientes en el carrito (requiere rol user).
 # BE2-entrega-final-diaz
+# BE2-entrega-final-diaz
