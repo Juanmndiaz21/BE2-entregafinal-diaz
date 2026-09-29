@@ -2,17 +2,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
-const dotenv = require('dotenv');
-
-dotenv.config();
-
+const { PORT, MONGO_URI } = require('./config/config');
 const initializePassport = require('./config/passport.config');
 const sessionsRouter = require('./routes/sessions.router');
+const productsRouter = require('./routes/products.router');
+const cartsRouter = require('./routes/carts.router');
 
 const app = express();
-const PORT = process.env.PORT || 8080;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/ecommerce';
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -21,6 +17,8 @@ initializePassport();
 app.use(passport.initialize());
 
 app.use('/api/sessions', sessionsRouter);
+app.use('/api/products', productsRouter);
+app.use('/api/carts', cartsRouter);
 
 mongoose.connect(MONGO_URI)
     .then(() => {

@@ -1,7 +1,7 @@
 const passport = require('passport');
 const jwt = require('passport-jwt');
-const userModel = require('../models/user.model');
-const { JWT_SECRET } = require('../utils/jwt');
+const { userRepository } = require('../repositories');
+const { JWT_SECRET } = require('../config/config');
 
 const JWTStrategy = jwt.Strategy;
 const ExtractJwt = jwt.ExtractJwt;
@@ -23,7 +23,7 @@ const initializePassport = () => {
         secretOrKey: JWT_SECRET
     }, async (jwt_payload, done) => {
         try {
-            const user = await userModel.findById(jwt_payload.id).lean();
+            const user = await userRepository.findById(jwt_payload.id);
             if (!user) {
                 return done(null, false, { message: 'Usuario no encontrado.' });
             }

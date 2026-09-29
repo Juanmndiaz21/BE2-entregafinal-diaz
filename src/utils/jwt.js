@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'ecommerce_jwt_secret_key_2026';
+const { JWT_SECRET } = require('../config/config');
 
 const generateToken = (user) => {
     const payload = {
@@ -15,7 +15,21 @@ const generateToken = (user) => {
     return jwt.sign(payload, JWT_SECRET, { expiresIn: '24h' });
 };
 
+const generatePasswordResetToken = (user) => jwt.sign(
+    { id: user._id, email: user.email, purpose: 'password-reset' },
+    JWT_SECRET,
+    { expiresIn: '1h' }
+);
+
+const verifyPasswordResetToken = (token) => {
+    const payload = jwt.verify(token, JWT_SECRET);
+    if (payload.purpose !== 'password-reset') throw new Error('Invalid reset token purpose');
+    return payload;
+};
+
 module.exports = {
     JWT_SECRET,
-    generateToken
+    generateToken,
+    generatePasswordResetToken,
+    verifyPasswordResetToken
 };
